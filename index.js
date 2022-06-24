@@ -44,7 +44,7 @@ wss.on('connection', ws=>{
 
     }else if(comand === 'mouse_position'){
 
-      ws.send(`${comand}_x:${x},y:${y}`);
+      ws.send(`mouse_position ${x},${y}`);
 
     }else if(comand === 'draw_circle'){
 
@@ -111,16 +111,15 @@ wss.on('connection', ws=>{
       }
 
     }else if(comand === 'prnt_scrn'){
-      // ws.send(`${comand}`);
-      // const {x, y} = robot.getMousePos();
-      // const scrin = robot.screen.capture([x], [y], [100], [100]);
-      // const buff = new Buffer.from(JSON.stringify(scrin, null, 2));
-      // const base64Config = buff.toString("base64");
-      // // console.log(base64Config)
-      // ws.send(base64Config)
-      
-    }     
+    const scrin = robot.screen.capture([x], [y], [200], [200]);
+    const buff = new Jimp({ data: scrin.image, width: scrin.width, height: scrin.height }, async (err, image) => {
+      if(err)console.log(err);
 
+        const img = await image.getBufferAsync('image/png');
+        const base64Config = img.toString("base64");
+        ws.send(`prnt_scrn ${base64Config}`);
+      });
+    }    
   });
 
   ws.on('close', () => {
