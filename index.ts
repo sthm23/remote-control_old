@@ -26,40 +26,40 @@ wss.on('connection', ws=>{
     const {x, y} = robot.getMousePos();
 
     if(comand === 'mouse_up'){
-      ws.send(comand)
+      ws.send(comand+'\0')
       mouseUp(x, y, +comandInfo);
 
     }else if(comand === 'mouse_left'){
-      ws.send(comand)
+      ws.send(comand+'\0')
       mouseLeft(x, y, +comandInfo);
 
     }else if(comand === 'mouse_right'){
-      ws.send(comand)
+      ws.send(comand+'\0')
       mouseRight(x, y, +comandInfo);
 
     }else if(comand === 'mouse_down'){
-      ws.send(comand)
+      ws.send(comand+'\0')
       mouseDown(x, y, +comandInfo);
 
     }else if(comand === 'mouse_position'){
-      const str = mousePosition(x,y);
+      const str = mousePosition(x, y);
       ws.send(str);
 
     }else if(comand === 'draw_circle'){
       drawCircle(+x, +y, +comandInfo);
-      ws.send(`${comand}`);
+      ws.send(`${comand}\0`);
 
     }else if(comand === 'draw_rectangle'){
       drawRectangle(x, y, comands);
-      ws.send(`${comand}`);
+      ws.send(`${comand}\0`);
 
     }else if(comand === 'draw_square'){
       drawSquare(x, y, +comandInfo);
-      ws.send(`${comand}`);
+      ws.send(`${comand}\0`);
       
     }else if(comand === 'prnt_scrn'){
       const img = await printScrin(x, y);
-      ws.send(`prnt_scrn ${img}`);
+      ws.send(`prnt_scrn ${img}\0`);
       
     }
   });
