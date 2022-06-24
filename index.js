@@ -58,8 +58,28 @@ wss.on('connection', ws=>{
 
     }else if(comand === 'draw_rectangle'){
       ws.send(`${comand}`);
+      console.log(comands)//2 znacheniya
     }else if(comand === 'draw_square'){
+      const mousePos = robot.getMousePos();
+      const width = +comands[1];
       ws.send(`${comand}`);
+
+      for(let i=0; i<=width*4; i++){
+        if(i>=width+1 && i<=width*2){
+          //write right
+          robot.dragMouse(mousePos.x + i-width, mousePos.y+width);
+        }else if(i>=width*2+1 && i<=width*3){
+          //write down
+          robot.dragMouse(mousePos.x+width, mousePos.y-i+width*3);
+        }else if(i>=width*3+1 && i<=width*4){
+          //write left
+          robot.dragMouse(mousePos.x - i+width*4, mousePos.y);
+        }else{
+          //write down
+          robot.dragMouse(mousePos.x, mousePos.y + i);
+        }
+      }
+
     }else if(comand === 'prnt_scrn'){
       // ws.send(`${comand}`);
       // const {x, y} = robot.getMousePos();
