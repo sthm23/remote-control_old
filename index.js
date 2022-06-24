@@ -16,33 +16,64 @@ wss.on('connection', ws=>{
     const comands = data.toString().split(' ');
     const comand = comands[0];
     const comandInfo = comands[1];
-    // ws.send(comand[0]);
+    const {x, y} = robot.getMousePos();
+
     if(comand === 'mouse_up'){
       ws.send(comand)
+      robot.setMouseDelay(5);
+      const newWay = y - comandInfo;
+      robot.moveMouse(x, newWay);
+
     }else if(comand === 'mouse_left'){
       ws.send(comand)
+      robot.setMouseDelay(5);
+      const newWay = x - comandInfo;
+      robot.moveMouse(newWay, y);
+
     }else if(comand === 'mouse_right'){
       ws.send(comand)
+      robot.setMouseDelay(5);
+      const newWay = x + +comandInfo;
+      robot.moveMouse(newWay, y);
+
     }else if(comand === 'mouse_down'){
       ws.send(comand)
+      robot.setMouseDelay(5);
+      const newWay = y + +comandInfo;
+      robot.moveMouse(x, newWay);
+
     }else if(comand === 'mouse_position'){
-      ws.send(`${comand}`);
+      ws.send(`${comand}_x:${x},y:${y}`);
     }else if(comand === 'draw_circle'){
+
       ws.send(`${comand}`);
+      let mousePos = robot.getMousePos();
+      const radius = comandInfo;
+
+      for (let i = 0; i <= Math.PI * 2; i += 0.01) {
+        const x = mousePos.x + (radius * Math.cos(i));
+        const y = mousePos.y + (radius * Math.sin(i));
+        robot.dragMouse(x-radius, y);
+      };
+
     }else if(comand === 'draw_rectangle'){
       ws.send(`${comand}`);
     }else if(comand === 'draw_square'){
       ws.send(`${comand}`);
     }else if(comand === 'prnt_scrn'){
-      ws.send(`${comand}`);
-    }
-    
-    
-    
-    console.log(comand, comandInfo);
+      // ws.send(`${comand}`);
+      // const {x, y} = robot.getMousePos();
+      // const scrin = robot.screen.capture([x], [y], [100], [100]);
+      // const buff = new Buffer.from(JSON.stringify(scrin, null, 2));
+      // const base64Config = buff.toString("base64");
+      // // console.log(base64Config)
+      // ws.send(base64Config)
+      
+    }     
+
   });
 
   ws.on('close', () => {
     console.log(`Client is closed`);
-})
-})
+  });
+});
