@@ -58,7 +58,26 @@ wss.on('connection', ws=>{
 
     }else if(comand === 'draw_rectangle'){
       ws.send(`${comand}`);
-      console.log(comands)//2 znacheniya
+      const mousePos = robot.getMousePos();
+      const width = +comands[1];
+      const heigth = +comands[2];
+      const s = (heigth+width)*2;
+
+      for(let i=0; i<=s; i++){
+        if(i>=heigth+1 && i<= width+heigth){
+          //write right
+          robot.dragMouse(mousePos.x-heigth + i, mousePos.y+heigth);
+        }else if(i>=width + heigth+1 && i<=width + 2*heigth){
+          //write up
+          robot.dragMouse(mousePos.x+width, mousePos.y-i+width + 2*heigth);
+        }else if(i>=width + 2*heigth+1 && i<=s){
+          //write left
+          robot.dragMouse(mousePos.x - i+s, mousePos.y);
+        }else{
+          //write down
+          robot.dragMouse(mousePos.x, mousePos.y + i);
+        }
+      }
     }else if(comand === 'draw_square'){
       const mousePos = robot.getMousePos();
       const width = +comands[1];
