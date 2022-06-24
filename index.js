@@ -43,7 +43,9 @@ wss.on('connection', ws=>{
       robot.moveMouse(x, newWay);
 
     }else if(comand === 'mouse_position'){
+
       ws.send(`${comand}_x:${x},y:${y}`);
+
     }else if(comand === 'draw_circle'){
 
       ws.send(`${comand}`);
@@ -54,6 +56,7 @@ wss.on('connection', ws=>{
         const x = mousePos.x + (radius * Math.cos(i));
         const y = mousePos.y + (radius * Math.sin(i));
         robot.dragMouse(x-radius, y);
+        robot.mouseClick();
       };
 
     }else if(comand === 'draw_rectangle'){
@@ -67,15 +70,19 @@ wss.on('connection', ws=>{
         if(i>=heigth+1 && i<= width+heigth){
           //write right
           robot.dragMouse(mousePos.x-heigth + i, mousePos.y+heigth);
+          robot.mouseClick();
         }else if(i>=width + heigth+1 && i<=width + 2*heigth){
           //write up
           robot.dragMouse(mousePos.x+width, mousePos.y-i+width + 2*heigth);
+          robot.mouseClick();
         }else if(i>=width + 2*heigth+1 && i<=s){
           //write left
           robot.dragMouse(mousePos.x - i+s, mousePos.y);
+          robot.mouseClick();
         }else{
           //write down
           robot.dragMouse(mousePos.x, mousePos.y + i);
+          robot.mouseClick();
         }
       }
     }else if(comand === 'draw_square'){
@@ -87,15 +94,19 @@ wss.on('connection', ws=>{
         if(i>=width+1 && i<=width*2){
           //write right
           robot.dragMouse(mousePos.x + i-width, mousePos.y+width);
+          robot.mouseClick();
         }else if(i>=width*2+1 && i<=width*3){
           //write down
           robot.dragMouse(mousePos.x+width, mousePos.y-i+width*3);
+          robot.mouseClick();
         }else if(i>=width*3+1 && i<=width*4){
           //write left
           robot.dragMouse(mousePos.x - i+width*4, mousePos.y);
+          robot.mouseClick();
         }else{
           //write down
           robot.dragMouse(mousePos.x, mousePos.y + i);
+          robot.mouseClick();
         }
       }
 
